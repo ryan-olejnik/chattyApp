@@ -33,20 +33,24 @@ class Message extends React.Component{
 }
 
 class CreateMessageForm extends React.Component{
-  
-  onClick(event){
-    event.preventDefault();
-    event.target.elements.message.value = '';
-    var newMessage = {username: event.target.elements.username.value, message: event.target.elements.message.value};
-    console.log(newMessage);
-    // this.props.addMessage({username: 'ryan', content: 'this is a new message'});
+  constructor(props){
+    super(props);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
 
+  onSubmit(event){
+    event.preventDefault();
+    var newMessage = {username: event.target.elements.username.value, content: event.target.elements.message.value};
+    console.log(newMessage);
+    this.props.addMessage(newMessage);
+
+    event.target.elements.message.value = '';
   }
 
   render(){
     return (
       <div id='message_form'>
-        <form onSubmit={this.onClick}>
+        <form onSubmit={this.onSubmit}>
           <input type='text' value={this.props.currentUser} name='username' placeholder='Your Name...'></input>
           <input type='text' name='message' placeholder='Your Message...'></input>
           <button type='submit'  >Post Message!</button>
@@ -76,8 +80,11 @@ class App extends React.Component {
     this.addMessage = this.addMessage.bind(this);
   }
 
+
   addMessage(newMessage){
-    this.setState({messages: [...this.state.messages, newMessage]}, ()=> {console.log(this.state)});
+    console.log('inside addMessage function: ', newMessage);
+    var currentMessages = this.state.messageList;
+    this.setState({messageList: [...currentMessages, newMessage]});
   }
 
   render() {

@@ -1,3 +1,32 @@
 h1 {
   color: tomato;
 }
+
+#navbar {
+  background-color: tomato;
+  color: black;
+  font-size: xx-large;
+
+  p{
+    margin: auto;
+    padding: 0.2em;
+    padding-left: 0.5em;
+  }
+
+}
+
+#page_container{
+  background-color: #ffffe6;
+  border-radius: 5px;
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+
+}
+
+#message_form{
+  padding: 0.5em;
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+}

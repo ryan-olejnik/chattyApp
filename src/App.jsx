@@ -51,8 +51,8 @@ class CreateMessageForm extends React.Component{
     return (
       <div id='message_form'>
         <form onSubmit={this.onSubmit}>
-          <input type='text' value={this.props.currentUser} name='username' placeholder='Your Name...'></input>
-          <input type='text' name='message' placeholder='Your Message...'></input>
+          <input type='text' defaultValue={this.props.currentUser} name='username' placeholder='Your Name...'></input>
+          <input type='text' name='message' ></input>
           <button type='submit'  >Post Message!</button>
         </form>
       </div>
@@ -87,7 +87,22 @@ class App extends React.Component {
     this.setState({messageList: [...currentMessages, newMessage]});
   }
 
+
+  componentDidMount() {
+    console.log("componentDidMount <App />");
+    setTimeout(() => {
+      console.log("Simulating incoming message");
+      // Add a new message to the list of messages in the data store
+      const newMessage = {username: "Michelle", content: "Hello there!"};
+      const messages = this.state.messageList.concat(newMessage)
+      // Update the state of the app component.
+      // Calling setState will trigger a call to render() in App and all child components.
+      this.setState({messageList: messages})
+    }, 3000);
+  }
+
   render() {
+    console.log('App - rendered')
     return (
       <div id='page_container'>
         <Navbar/>

@@ -5,6 +5,7 @@ function Message(props){
       <div class="message">
           <span class="message-username">{props.message.username}:  </span>
           <span class="message-content">{props.message.content}</span>
+          <span class="message-date"> ---date:{props.message.date}</span>
       </div>
 
       );

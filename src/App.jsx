@@ -13,10 +13,12 @@ class App extends React.Component {
         {
           username: "Bob",
           content: "Has anyone seen my marbles?",
+          date: +new Date()
         },
         {
           username: "Anonymous",
-          content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
+          content: "No, I think you lost them. You lost your marbles Bob. You lost them for good.",
+          date: +new Date()
         }
       ]
     }
@@ -26,18 +28,24 @@ class App extends React.Component {
   addMessage(newMessage){
     // If user has changed, create a message stating the change:
     if (newMessage.username !== this.state.currentUser){
-      console.log(`User has changed from ${this.state.currentUser} to ${newMessage.username}`)
+      // console.log(`User has changed from ${this.state.currentUser} to ${newMessage.username}`)
       var currentMessages = this.state.messageList;
       var userChangeMessage = {username: 'USERNAME CHANGE', content: `User ${this.state.currentUser} changed to ${newMessage.username}`}
-      
-      this.setState({messageList: [...currentMessages, userChangeMessage, newMessage], currentUser: newMessage.username}, ()=>{console.log('this.state = ', this.state)});
+      this.setState({messageList: [...currentMessages, userChangeMessage, newMessage], currentUser: newMessage.username}, ()=>{this.webSocket.send(JSON.stringify(this.state))});
     } else {
       var currentMessages = this.state.messageList;
-      this.setState({messageList: [...currentMessages, newMessage]});    
-
+      this.setState({messageList: [...currentMessages, newMessage]}, ()=>{this.webSocket.send(JSON.stringify(this.state));});    
     }
-
   }
+
+  componentDidMount(){
+    this.webSocket = new WebSocket("ws://localhost:3001");
+    this.webSocket.onopen = (event)=>{
+      this.webSocket.send(JSON.stringify('componentDidMount'));
+      this.webSocket.addEventListener('message', (message)=>{console.log(message.data)});
+    }
+  }
+
 
 
   render() {

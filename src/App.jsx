@@ -55,9 +55,7 @@ class CreateMessageForm extends React.Component{
   onSubmit(event){
     event.preventDefault();
     var newMessage = {username: event.target.elements.username.value, content: event.target.elements.message.value};
-    console.log(newMessage);
-    this.props.addMessage(newMessage);
-
+    this.props.addMessage(newMessage)
     event.target.elements.message.value = '';
   }
 
@@ -65,7 +63,12 @@ class CreateMessageForm extends React.Component{
     return (
       <footer className='chatbar'>
         <form className='chatbar' onSubmit={this.onSubmit}>
-          <input className='chatbar-username' type='text' defaultValue={this.props.currentUser} name='username' placeholder='Your Name...'></input>
+          <input
+            className='chatbar-username' 
+            type='text' defaultValue={this.props.currentUser} 
+            name='username' 
+            placeholder='Your Name...'>
+          </input>
           <input className='chatbar-message' type='text' name='message' ></input>
           <button type='submit'  >Post Message!</button>
         </form>
@@ -79,7 +82,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      currentUser: 'ryan-admin',
+      currentUser: 'Ryan-Olej',
       messageList: [
         {
           username: "Bob",
@@ -95,18 +98,23 @@ class App extends React.Component {
   }
 
   addMessage(newMessage){
-    console.log('inside addMessage function: ', newMessage);
-    var currentMessages = this.state.messageList;
-    this.setState({messageList: [...currentMessages, newMessage]});
+    // If user has changed, create a message stating the change:
+    if (newMessage.username !== this.state.currentUser){
+      console.log(`User has changed from ${this.state.currentUser} to ${newMessage.username}`)
+      var currentMessages = this.state.messageList;
+      var userChangeMessage = {username: 'USERNAME CHANGE', content: `User ${this.state.currentUser} changed to ${newMessage.username}`}
+      
+      this.setState({messageList: [...currentMessages, userChangeMessage, newMessage], currentUser: newMessage.username}, ()=>{console.log('this.state = ', this.state)});
+    } else {
+      var currentMessages = this.state.messageList;
+      this.setState({messageList: [...currentMessages, newMessage]});    
+
+    }
+
   }
 
-  componentDidMount() {
-    console.log("componentDidMount <App />");
- 
-  }
 
   render() {
-    console.log('App - rendered')
     return (
       <div id='page_container'>
         <Navbar/>
@@ -118,23 +126,3 @@ class App extends React.Component {
 }
 
 export default App;
-/*
-</head>
-<body>
-  <nav class="navbar">
-    <a href="/" class="navbar-brand">Chatty</a>
-  </nav>
-<main class="messages">
-  <div class="message">
-    <span class="message-username">Anonymous1</span>
-    <span class="message-content">I won't be impressed with technology until I can download food.</span>
-  </div>
-  <div class="message system">
-    Anonymous1 changed their name to nomnom.
-  </div>
-</main>
-<footer class="chatbar">
-  <input class="chatbar-username" placeholder="Your Name (Optional)" />
-  <input class="chatbar-message" placeholder="Type a message and hit ENTER" />
-</footer>
-*/

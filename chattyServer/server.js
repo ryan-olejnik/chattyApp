@@ -19,18 +19,33 @@ wss.on('connection', (ws) => {
   console.log('Client connected');
   
   ws.on('message', (message) => {
-    // console.log(message);
     var parsedMessage = JSON.parse(message);
 
-    // add the UUID
+
+    if (parsedMessage.currentUser !== parsedMessage.message.username){
+      let userChangeNotification = {
+        message: {
+          username: 'USERNAME CHANGE',
+          content: `User ${parsedMessage.currentUser} changed their name to: ${parsedMessage.message.username}`,
+          id: uuid(),
+          date: +new Date(),
+          },
+        type: 'username_change',
+        currentUser: parsedMessage.message.username
+        }
+      // console.log(parsedMessage);
+      console.log(userChangeNotification);
+      debugger;
+      wss.clients.forEach((client)=>{client.send(JSON.stringify(userChangeNotification))});
+    }
+
+
+
     parsedMessage.message.id = uuid();
     parsedMessage.message.date = +new Date();
-
+    parsedMessage.type = 'message';
 
     console.log(parsedMessage);
-
-    // send new message to all clients
-
 
 
 
@@ -45,39 +60,3 @@ wss.on('connection', (ws) => {
 console.log('Socket server initialized on port 3001')
 
 // ----------------------------------------------------------------------------------
-// const WebSocket = require("ws");
-
-// const port = 3001;
-
-// const wss = new WebSocket.Server({ port });
-
-// let messageList = [];
-
-// wss.on("connection", function connection(ws) {
-//   ws.on("message", function incoming(message) {
-//     console.log("received: %s", message);
-
-//     let parsedMessage = JSON.parse(message);
-//     parsedMessage.date = +new Date();
-
-//     wss.clients.forEach(function each(client) {
-//       client.send(JSON.stringify(parsedMessage));
-//     });
-//   });
-
-//   let initialMessage = {
-//     username: "the machine",
-//     value: "sparta!!!!!!!!!!!!!",
-//     date: +new Date(),
-//   };
-
-//   ws.send(JSON.stringify(initialMessage));
-
-//   console.log(`
-//     new connection!!
-//     the number of connections now is ${wss.clients}
-//   `);
-// });
-
-// console.log(`✨ web socket server running on port ${port}`);
-

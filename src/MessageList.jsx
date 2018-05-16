@@ -8,7 +8,6 @@ class MessageList extends React.Component{
       return (<Message key={index} message={message}/>);
     });
     
-    // console.log(messageList);
     return (
       <main className='messages'>
         {messageList}

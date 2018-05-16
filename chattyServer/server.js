@@ -1,5 +1,6 @@
 // const express = require('express');
 const WebSocket = require('ws');
+const uuid = require('uuid/v1');
 
 // const PORT = 3000;
 // Create a new express server
@@ -18,8 +19,22 @@ wss.on('connection', (ws) => {
   console.log('Client connected');
   
   ws.on('message', (message) => {
-    console.log(JSON.parse(message));
-    wss.clients.forEach((client)=>{client.send('Got your message!!')});
+    // console.log(message);
+    var parsedMessage = JSON.parse(message);
+
+    // add the UUID
+    parsedMessage.message.id = uuid();
+    parsedMessage.message.date = +new Date();
+
+
+    console.log(parsedMessage);
+
+    // send new message to all clients
+
+
+
+
+    wss.clients.forEach((client)=>{client.send(JSON.stringify(parsedMessage))});
 
   })
 

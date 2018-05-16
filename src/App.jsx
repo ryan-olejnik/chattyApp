@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 
+
 function Navbar(props){
   return (
-    <div id='navbar'>
-      <p>Chattyyyyyyyyyy</p>
-    </div>
+    <nav className='navbar'>
+      <a href="/" className='navbar-brand'>Chattyyyyyyyyyy</a>
+    </nav>
     );
 }
 
@@ -17,9 +18,9 @@ class MessageList extends React.Component{
     
     // console.log(messageList);
     return (
-      <div>
+      <main className='messages'>
         {messageList}
-      </div>
+      </main>
       )
   }
 }
@@ -28,7 +29,20 @@ class Message extends React.Component{
 
   render(){
     // console.log(this.props)
-    return(<p><b>{this.props.message.username}:</b>  {this.props.message.content}</p>);
+
+    // IF USER MESSAGE:
+    return(
+      <div class="message">
+          <span class="message-username">{this.props.message.username}:  </span>
+          <span class="message-content">{this.props.message.content}</span>
+      </div>
+
+      );
+
+  // ELSE IF SYSTEM MESSAGE:
+  //     <div class="message system">
+  //   Anonymous1 changed their name to nomnom.
+  // </div>
   }
 }
 
@@ -49,13 +63,13 @@ class CreateMessageForm extends React.Component{
 
   render(){
     return (
-      <div id='message_form'>
-        <form onSubmit={this.onSubmit}>
-          <input type='text' defaultValue={this.props.currentUser} name='username' placeholder='Your Name...'></input>
-          <input type='text' name='message' ></input>
+      <footer className='chatbar'>
+        <form className='chatbar' onSubmit={this.onSubmit}>
+          <input className='chatbar-username' type='text' defaultValue={this.props.currentUser} name='username' placeholder='Your Name...'></input>
+          <input className='chatbar-message' type='text' name='message' ></input>
           <button type='submit'  >Post Message!</button>
         </form>
-      </div>
+      </footer>
       )
   }
 }
@@ -80,25 +94,15 @@ class App extends React.Component {
     this.addMessage = this.addMessage.bind(this);
   }
 
-
   addMessage(newMessage){
     console.log('inside addMessage function: ', newMessage);
     var currentMessages = this.state.messageList;
     this.setState({messageList: [...currentMessages, newMessage]});
   }
 
-
   componentDidMount() {
     console.log("componentDidMount <App />");
-    setTimeout(() => {
-      console.log("Simulating incoming message");
-      // Add a new message to the list of messages in the data store
-      const newMessage = {username: "Michelle", content: "Hello there!"};
-      const messages = this.state.messageList.concat(newMessage)
-      // Update the state of the app component.
-      // Calling setState will trigger a call to render() in App and all child components.
-      this.setState({messageList: messages})
-    }, 3000);
+ 
   }
 
   render() {
@@ -113,5 +117,24 @@ class App extends React.Component {
   }
 }
 
-
 export default App;
+/*
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="navbar-brand">Chatty</a>
+  </nav>
+<main class="messages">
+  <div class="message">
+    <span class="message-username">Anonymous1</span>
+    <span class="message-content">I won't be impressed with technology until I can download food.</span>
+  </div>
+  <div class="message system">
+    Anonymous1 changed their name to nomnom.
+  </div>
+</main>
+<footer class="chatbar">
+  <input class="chatbar-username" placeholder="Your Name (Optional)" />
+  <input class="chatbar-message" placeholder="Type a message and hit ENTER" />
+</footer>
+*/

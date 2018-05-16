@@ -1,0 +1,15 @@
+{
+  "name": "chattyserver",
+  "version": "1.0.0",
+  "description": "Web socket server for chattyApp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ryan Olejnik",
+  "license": "ISC",
+  "dependencies": {
+    "express": "4.16.3",
+    "ws": "5.1.1"
+  }
+}

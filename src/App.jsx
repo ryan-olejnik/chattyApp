@@ -12,14 +12,15 @@ class App extends React.Component {
       messageList: []
     }
     this.addMessage = this.addMessage.bind(this);
-    this.changeUsername = this.changeUsername.bind(this);
   }
 
-  changeUsername(newUsername){
-    this.setState({currentUser: newUsername});
-  }
 
   addMessage(newMessage){
+    // console.log(newMessage.username)
+    // console.log(this.state.currentUser)
+    if (newMessage.username !== this.state.currentUser){
+      this.setState({currentUser: newMessage.username})
+    }
     this.webSocket.send(JSON.stringify({message: newMessage, currentUser: this.state.currentUser}))
   }
 
@@ -29,11 +30,6 @@ class App extends React.Component {
       this.webSocket.addEventListener('message', (message)=>{
         let parsedMessage = JSON.parse(message.data);
         // console.log(parsedMessage);
-        if (parsedMessage.type === 'username_change'){
-          console.log(parsedMessage.currentUser);
-          this.setState({currentUser: parsedMessage.currentUser});
-        }
-
         this.setState({messageList: [...this.state.messageList, parsedMessage.message]});
 
       });

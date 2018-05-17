@@ -16,40 +16,79 @@ const wss = new WebSocket.Server({port: 3001});
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
-  console.log('Client connected');
+  console.log('New client connected\n');
   
   ws.on('message', (message) => {
     var parsedMessage = JSON.parse(message);
+    console.log('parsedMessage received: ', parsedMessage, '\n');
+
+    switch(parsedMessage.type){
+      case 'new_message':
+        // handle the new message
+        // send the message out to all clients
+        // console.log('new_message recieved:', parsedMessage, '\n');
+        // { username: 'ryan',
+        //   type: 'new_message',
+        //   message: { username: 'ryan', content: 'hey' } }
+        // parsedMessage.message.id = uuid();
+        // parsedMessage.message.date = +new Date();
+        wss.clients.forEach((client)=>{client.send(JSON.stringify(parsedMessage))});
 
 
-    if (parsedMessage.currentUser !== parsedMessage.message.username){
-      let userChangeNotification = {
-        message: {
-          username: 'USERNAME CHANGE',
-          content: `User ${parsedMessage.currentUser} changed their name to: ${parsedMessage.message.username}`,
-          id: uuid(),
-          date: +new Date(),
-          },
-        type: 'username_change',
-        currentUser: parsedMessage.message.username
-        }
-      // console.log(parsedMessage);
-      console.log(userChangeNotification);
-      debugger;
-      wss.clients.forEach((client)=>{client.send(JSON.stringify(userChangeNotification))});
+
+        break;
+
+      case 'username_change':
+        // send message to all clients notifying of user change
+        // console.log('username_change recieved:', parsedMessage, '\n');
+        // parsedMessage.message.id = uuid();
+        // parsedMessage.message.date = +new Date();
+        wss.clients.forEach((client)=>{client.send(JSON.stringify(parsedMessage))});
+        break;
+
+      case 'new_client_connection':
+        // console.log('new_client_connection recieved:', parsedMessage);
+        // parsedMessage.message = {};
+        // parsedMessage.message.id = uuid();
+        // parsedMessage.message.date = +new Date();
+        wss.clients.forEach((client)=>{client.send(JSON.stringify(parsedMessage))});
+        break;
+
+      default:
+        console.log('Unknown message recieved:', parsedMessage);
     }
 
 
 
-    parsedMessage.message.id = uuid();
-    parsedMessage.message.date = +new Date();
-    parsedMessage.type = 'message';
 
-    console.log(parsedMessage);
+    // if (parsedMessage.currentUser !== parsedMessage.message.username){
+    //   let userChangeNotification = {
+    //     message: {
+    //       username: 'USERNAME CHANGE',
+    //       content: `User ${parsedMessage.currentUser} changed their name to: ${parsedMessage.message.username}`,
+    //       id: uuid(),
+    //       date: +new Date(),
+    //       },
+    //     type: 'username_change',
+    //     currentUser: parsedMessage.message.username
+    //     }
+    //   // console.log(parsedMessage);
+    //   console.log(userChangeNotification);
+    //   debugger;
+    //   wss.clients.forEach((client)=>{client.send(JSON.stringify(userChangeNotification))});
+    // }
 
 
 
-    wss.clients.forEach((client)=>{client.send(JSON.stringify(parsedMessage))});
+    // parsedMessage.message.id = uuid();
+    // parsedMessage.message.date = +new Date();
+    // parsedMessage.type = 'message';
+
+    // console.log(parsedMessage);
+
+
+
+    // wss.clients.forEach((client)=>{client.send(JSON.stringify(parsedMessage))});
 
   })
 

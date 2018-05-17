@@ -8,8 +8,8 @@ class CreateMessageForm extends React.Component{
 
   onSubmit(event){
     event.preventDefault();
-    var newMessage = {username: event.target.elements.username.value, content: event.target.elements.message.value};
-    this.props.addMessage(newMessage)
+    var newMessage = {content: event.target.elements.message.value};
+    this.props.sendNewMessage(newMessage)
     event.target.elements.message.value = '';
   }
 
@@ -17,14 +17,8 @@ class CreateMessageForm extends React.Component{
     return (
       <footer className='chatbar'>
         <form className='chatbar' onSubmit={this.onSubmit}>
-          <input
-            className='chatbar-username' 
-            type='text' defaultValue={this.props.currentUser} 
-            name='username' 
-            placeholder='Your Name...'>
-          </input>
           <input className='chatbar-message' type='text' name='message' ></input>
-          <button type='submit'  >Post Message!</button>
+          <button type='submit'>Post Message!</button>
         </form>
       </footer>
       )

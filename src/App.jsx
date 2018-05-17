@@ -11,7 +11,8 @@ class App extends React.Component {
       currentUser: '',
       previousUser: '',
       messageList: [],
-      connectedToSocket: false
+      connectedToSocket: false,
+      usersOnline: 0
     }
     this.sendNewMessage = this.sendNewMessage.bind(this);
     this.openConnection = this.openConnection.bind(this);
@@ -24,10 +25,6 @@ class App extends React.Component {
 
     this.webSocket.send(JSON.stringify({username: this.state.currentUser, type: 'new_message', message: {content: message.content}}))
   }
-
-
-
-
 
 
   openConnection(event){
@@ -43,10 +40,11 @@ class App extends React.Component {
           this.webSocket.send(JSON.stringify({type: 'new_client_connection', username: newUsername, message: {content: `${newUsername} has joined the chatroom!`}}));
           this.webSocket.addEventListener('message', (message)=>{
             let parsedMessage = JSON.parse(message.data);
-            console.log('inside openConnection: parsedMessage = ', parsedMessage);
+            if (parsedMessage.type === 'new_client_connection'){
+              this.setState({usersOnline: parsedMessage.numberOfClients});
+            }
             let newMessageList = this.state.messageList;
             newMessageList.push(parsedMessage);
-            console.log('inside openConnection: newMessageList = ', newMessageList);
             this.setState({messageList: newMessageList});
 
           });
@@ -63,7 +61,6 @@ class App extends React.Component {
           username: newUsername,
           message: {content: `user ${oldUsername} changed username to: ${newUsername}`}
           }));
-        // 
       }
 
 
@@ -77,7 +74,8 @@ class App extends React.Component {
       <div id='page_container'>
         <Navbar 
         openConnection={this.openConnection}
-        currentUser={this.state.currentUser} />
+        currentUser={this.state.currentUser}
+        numberOfUsersOnline={this.state.usersOnline} />
         <MessageList messageList={this.state.messageList}/>
         <CreateMessageForm 
           sendNewMessage={this.sendNewMessage} 

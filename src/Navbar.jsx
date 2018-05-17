@@ -13,6 +13,7 @@ function Navbar(props){
         defaultValue={props.currentUser}  ></input>
         <button type='submit'>Connect / Change Username</button>
       </form>
+      <p className='navbar-brand'>Users Online: {props.numberOfUsersOnline}</p>
     </nav>
     );
 }

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 function Message(props){
-  console.log('props.content', props.notification);
   if (props.notification.type === 'new_client_connection'){
     return (
       <div class="message">

@@ -17,7 +17,11 @@ class CreateMessageForm extends React.Component{
     return (
       <footer className='chatbar'>
         <form className='chatbar' onSubmit={this.onSubmit}>
-          <input className='chatbar-message' type='text' name='message' ></input>
+          <input 
+            className='chatbar-message'
+            type='text' 
+            name='message'>
+          </input>
           <button type='submit'>Post Message!</button>
         </form>
       </footer>

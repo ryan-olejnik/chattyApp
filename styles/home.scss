@@ -18,6 +18,12 @@ body {
   padding: 5px;
   position: fixed;
   right: 0;
+  
+  #post-message-button{
+    height: 42px;
+    margin: auto;
+    border-radius: 5px;
+  }
 }
 
 .chatbar-message,
@@ -73,6 +79,32 @@ body {
   position: fixed;
   right: 0;
   top: 0;
+
+
+  #number-of-users{
+    float: right;
+    position: relative;
+    margin: 21px;
+    font-size: large;
+  }
+
+  #username-textbox{
+    margin: 9px;
+    margin-right: -2px;
+    border-radius: 2px;
+    float: right;
+  }
+
+  #change-username-button{
+    position: relative;
+    float: right;
+    height: 3em;
+    position: relative;
+    margin: 9px;
+    margin-right: 3px;
+    border-radius: 2px;
+  }
+
 }
 
 .navbar-brand {
@@ -86,3 +118,4 @@ body {
   padding: 0 10px;
   text-decoration: none;
 }
+

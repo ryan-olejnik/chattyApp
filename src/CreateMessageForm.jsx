@@ -20,9 +20,10 @@ class CreateMessageForm extends React.Component{
           <input 
             className='chatbar-message'
             type='text' 
-            name='message'>
+            name='message'
+            autoComplete='off'>
           </input>
-          <button type='submit'>Post Message!</button>
+          <button id='post-message-button'type='submit'>Post Message!</button>
         </form>
       </footer>
       )

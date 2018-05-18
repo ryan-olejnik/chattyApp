@@ -4,9 +4,8 @@ import Message from './Message.jsx';
 class MessageList extends React.Component{
 
   render(){
-    // console.log('inside MessageList conponent. props.messageList = ', this.props.messageList);
     var messageList = this.props.messageList.map((message, index)=>{
-      return (<Message key={index} notification={message}/>);  
+      return (<Message key={index} messageData={message}/>);  
     });
     
     return (

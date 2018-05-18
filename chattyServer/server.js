@@ -1,36 +1,20 @@
-// const express = require('express');
 const WebSocket = require('ws');
 const uuid = require('uuid/v1');
 
-// const PORT = 3000;
-// Create a new express server
-// const server = express()
-//    // Make the express server serve static assets (html, javascript, css) from the /public folder
-//   .use(express.static('public'))
-//   .listen(PORT, '0.0.0.0', 'localhost', () => console.log(`Listening on ${ PORT }`));
-
-// Create the WebSockets server
 var colorStepper = -1;
 function generateColor(){
   const colors = ['red', 'blue', 'green', 'purple'];
   colorStepper++;
+  if (colorStepper === 4){ colorStepper = 0;}
   return colors[colorStepper];
 }
 
 const wss = new WebSocket.Server({port: 3001});
-
-// Set up a callback that will run when a client connects to the server
-// When a client connects they are assigned a socket, represented by
-// the ws parameter in the callback.
 wss.on('connection', (ws) => {
-  console.log('New client connected\n');
-  // console.log(wss.clients);
-  
+  console.log('New client connected\n');  
   ws.on('message', (message) => {
     var parsedMessage = JSON.parse(message);
-    // find out who it came from????????????????????????????????????
     console.log('incoming message: ', parsedMessage);
-
     var numberOfClients = wss.clients.size;
 
     switch(parsedMessage.type){
@@ -51,7 +35,6 @@ wss.on('connection', (ws) => {
         parsedMessage.message.color = color;
         wss.clients.forEach((client)=>{client.send(JSON.stringify(parsedMessage))});
 
-
         ws.send(JSON.stringify({
           type: 'new_client_colorset',
           username: parsedMessage.username,
@@ -64,7 +47,6 @@ wss.on('connection', (ws) => {
     }
   })
 
-  // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => console.log('Client disconnected'));
 });
 

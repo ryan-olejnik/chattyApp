@@ -23,7 +23,7 @@ class CreateMessageForm extends React.Component{
             name='message'
             autoComplete='off'>
           </input>
-          <button id='post-message-button'type='submit'>Post Message!</button>
+          <button id='post-message-button'type='submit'>SEND</button>
         </form>
       </footer>
       )

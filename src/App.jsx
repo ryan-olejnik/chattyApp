@@ -6,7 +6,6 @@ import CreateMessageForm from './CreateMessageForm.jsx';
 class App extends React.Component {
   constructor(props){
     super(props);
-
     this.state = {
       currentUser: '',
       previousUser: '',
@@ -21,9 +20,6 @@ class App extends React.Component {
 
 
   sendNewMessage(message){
-    // From CreateMessageForm:
-    // message = {content: 'hey', username: 'ryan'}
-
     this.webSocket.send(JSON.stringify({username: this.state.currentUser, type: 'new_message',  message: {content: message.content, color: this.state.color}}))
   }
 
@@ -39,6 +35,7 @@ class App extends React.Component {
         this.webSocket.onopen = (event)=>{
           this.setState({connectedToSocket: true, currentUser: newUsername});
           this.webSocket.send(JSON.stringify({type: 'new_client_connection', username: newUsername, message: {content: `${newUsername} has joined the chatroom!`}}));
+          
           this.webSocket.addEventListener('message', (message)=>{
             let parsedMessage = JSON.parse(message.data);
             if (parsedMessage.type === 'new_client_connection'){
@@ -47,20 +44,17 @@ class App extends React.Component {
             if (parsedMessage.type === 'new_client_colorset'){
               this.setState({color: parsedMessage.color}, ()=>{console.log('this users color is set to: ', this.state.color)})
             }
+            
             let newMessageList = this.state.messageList;
             newMessageList.push(parsedMessage);
             this.setState({messageList: newMessageList});
-
-
           });
         }
-        
+      
+      // Already connected to websocket, changing username:  
       } else if (newUsername !== this.state.currentUser && this.state.connectedToSocket === true){
-        // username_change
-        // console.log('Username change!')
         let oldUsername = this.state.currentUser;
         this.setState({currentUser: newUsername}, ()=>{console.log(`${oldUsername} changed to ${newUsername}`)});
-
         this.webSocket.send(JSON.stringify(
           {type: 'username_change',
           color: this.state.color,
@@ -68,12 +62,7 @@ class App extends React.Component {
           message: {color: this.state.color, content: `user ${oldUsername} changed username to: ${newUsername}`}
           }));
       }
-
-
-
     }
-
-
 
   render() {
     return (

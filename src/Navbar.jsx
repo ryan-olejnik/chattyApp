@@ -4,7 +4,7 @@ function Navbar(props){
 
   return (
     <nav className='navbar'>
-      <a href="/" className='navbar-brand'>Chattyyyyyyyyyy</a>
+      <a href="/" className='navbar-brand'>ChattyyApp</a>
       <form onSubmit={props.openConnection} onSubmit={props.openConnection}>
         <input 
         id='username-textbox'

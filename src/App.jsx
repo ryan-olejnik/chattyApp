@@ -16,6 +16,7 @@ class App extends React.Component {
     }
     this.sendNewMessage = this.sendNewMessage.bind(this);
     this.openConnection = this.openConnection.bind(this);
+    document.title = 'ChattyApp';
   }
 
 
@@ -44,7 +45,7 @@ class App extends React.Component {
             if (parsedMessage.type === 'new_client_colorset'){
               this.setState({color: parsedMessage.color}, ()=>{console.log('this users color is set to: ', this.state.color)})
             }
-            
+
             let newMessageList = this.state.messageList;
             newMessageList.push(parsedMessage);
             this.setState({messageList: newMessageList});

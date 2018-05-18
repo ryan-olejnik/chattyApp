@@ -1,11 +1,10 @@
 # ChattyApp
-=====================
 
 ChattyApp is a single-page instant-messaging chatroom app using React and node.js
 
 ## Screenshots
 
-
+!['main page'](https://github.com/ryan-olejnik/chatterApp/blob/master/screenshots/ChattyApp2.png)
 
 ## Dependencies
 
@@ -21,7 +20,7 @@ ChattyApp is a single-page instant-messaging chatroom app using React and node.j
   Run both the ws websocket server and the node server:
 
   Start up the node server using the commant: `$ npm start` from the project folder.
+  
   Start up the ws Websocket server by running `$ node server.js` from inside the `chattyServer/` folder.
-
 
   Open your browser and go to: [http://localhost:3000](http://localhost:3000)

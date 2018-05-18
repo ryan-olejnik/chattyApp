@@ -11,19 +11,22 @@ const uuid = require('uuid/v1');
 
 // Create the WebSockets server
 const wss = new WebSocket.Server({port: 3001});
+const colors = ['red', 'blue', 'green', 'purple'];
+var colorStepper = 0;
 
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
   console.log('New client connected\n');
-  // console.log(`There are ${numberOfClients} connected`);
-  // console.log('number of users: ', wss.clients.size);
+  // console.log(wss.clients);
   
   ws.on('message', (message) => {
     var parsedMessage = JSON.parse(message);
+    // find out who it came from????????????????????????????????????
+    console.log('incoming message: ', parsedMessage);
+
     var numberOfClients = wss.clients.size;
-    console.log('parsedMessage received: ', parsedMessage, '\n');
 
     switch(parsedMessage.type){
       case 'new_message':
@@ -37,46 +40,25 @@ wss.on('connection', (ws) => {
         break;
 
       case 'new_client_connection':
+        let color = colors[colorStepper];
+        colorStepper++
+        if (colorStepper === 3) {colorStepper = 0;}
+
         parsedMessage.numberOfClients = numberOfClients;
+        parsedMessage.message.color = color;
         wss.clients.forEach((client)=>{client.send(JSON.stringify(parsedMessage))});
+
+
+        ws.send(JSON.stringify({
+          type: 'new_client_colorset',
+          username: parsedMessage.username,
+          color: color,
+          message: { content: `Your color is ${color}` } }))
         break;
 
       default:
         console.log('Unknown message recieved:', parsedMessage);
     }
-
-
-
-
-    // if (parsedMessage.currentUser !== parsedMessage.message.username){
-    //   let userChangeNotification = {
-    //     message: {
-    //       username: 'USERNAME CHANGE',
-    //       content: `User ${parsedMessage.currentUser} changed their name to: ${parsedMessage.message.username}`,
-    //       id: uuid(),
-    //       date: +new Date(),
-    //       },
-    //     type: 'username_change',
-    //     currentUser: parsedMessage.message.username
-    //     }
-    //   // console.log(parsedMessage);
-    //   console.log(userChangeNotification);
-    //   debugger;
-    //   wss.clients.forEach((client)=>{client.send(JSON.stringify(userChangeNotification))});
-    // }
-
-
-
-    // parsedMessage.message.id = uuid();
-    // parsedMessage.message.date = +new Date();
-    // parsedMessage.type = 'message';
-
-    // console.log(parsedMessage);
-
-
-
-    // wss.clients.forEach((client)=>{client.send(JSON.stringify(parsedMessage))});
-
   })
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
@@ -85,4 +67,3 @@ wss.on('connection', (ws) => {
 
 console.log('Socket server initialized on port 3001')
 
-// ----------------------------------------------------------------------------------

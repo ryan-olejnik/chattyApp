@@ -9,6 +9,10 @@ body {
   margin: 70px 0;
 }
 
+#page-container{
+  padding:1em;
+}
+
 .chatbar {
   background: tomato;
   border-top: 1px solid black;
@@ -18,7 +22,7 @@ body {
   padding: 5px;
   position: fixed;
   right: 0;
-  
+
   #post-message-button{
     height: 42px;
     margin: auto;
@@ -34,6 +38,7 @@ body {
   line-height: 40px;
   margin: 5px;
   padding: 0 9px;
+  border-radius: 1px;
 }
 
 .chatbar-message {

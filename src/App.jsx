@@ -12,7 +12,8 @@ class App extends React.Component {
       previousUser: '',
       messageList: [],
       connectedToSocket: false,
-      usersOnline: 0
+      usersOnline: 0,
+      color: 'black'
     }
     this.sendNewMessage = this.sendNewMessage.bind(this);
     this.openConnection = this.openConnection.bind(this);
@@ -20,12 +21,11 @@ class App extends React.Component {
 
 
   sendNewMessage(message){
-    // From CreateMessageForm: message = {content: 'hey', username: 'ryan'}
-    // console.log(message) 
+    // From CreateMessageForm:
+    // message = {content: 'hey', username: 'ryan'}
 
-    this.webSocket.send(JSON.stringify({username: this.state.currentUser, type: 'new_message', message: {content: message.content}}))
+    this.webSocket.send(JSON.stringify({username: this.state.currentUser, type: 'new_message',  message: {content: message.content, color: this.state.color}}))
   }
-
 
   openConnection(event){
     event.preventDefault();
@@ -33,6 +33,7 @@ class App extends React.Component {
 
     if (newUsername === ''){
       alert('Enter a username!!');
+    // FIRST TIME CONNECTING:  
     } else if (this.state.connectedToSocket === false){
         this.webSocket = new WebSocket("ws://localhost:3001");
         this.webSocket.onopen = (event)=>{
@@ -43,9 +44,13 @@ class App extends React.Component {
             if (parsedMessage.type === 'new_client_connection'){
               this.setState({usersOnline: parsedMessage.numberOfClients});
             }
+            if (parsedMessage.type === 'new_client_colorset'){
+              this.setState({color: parsedMessage.color}, ()=>{console.log('this users color is set to: ', this.state.color)})
+            }
             let newMessageList = this.state.messageList;
             newMessageList.push(parsedMessage);
             this.setState({messageList: newMessageList});
+
 
           });
         }
@@ -58,8 +63,9 @@ class App extends React.Component {
 
         this.webSocket.send(JSON.stringify(
           {type: 'username_change',
+          color: this.state.color,
           username: newUsername,
-          message: {content: `user ${oldUsername} changed username to: ${newUsername}`}
+          message: {color: this.state.color, content: `user ${oldUsername} changed username to: ${newUsername}`}
           }));
       }
 
@@ -71,7 +77,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div id='page_container'>
+      <div id='page-container'>
         <Navbar 
         openConnection={this.openConnection}
         currentUser={this.state.currentUser}

@@ -10,9 +10,14 @@ const uuid = require('uuid/v1');
 //   .listen(PORT, '0.0.0.0', 'localhost', () => console.log(`Listening on ${ PORT }`));
 
 // Create the WebSockets server
+var colorStepper = -1;
+function generateColor(){
+  const colors = ['red', 'blue', 'green', 'purple'];
+  colorStepper++;
+  return colors[colorStepper];
+}
+
 const wss = new WebSocket.Server({port: 3001});
-const colors = ['red', 'blue', 'green', 'purple'];
-var colorStepper = 0;
 
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
@@ -40,9 +45,7 @@ wss.on('connection', (ws) => {
         break;
 
       case 'new_client_connection':
-        let color = colors[colorStepper];
-        colorStepper++
-        if (colorStepper === 3) {colorStepper = 0;}
+        let color = generateColor();
 
         parsedMessage.numberOfClients = numberOfClients;
         parsedMessage.message.color = color;

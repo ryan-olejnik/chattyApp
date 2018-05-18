@@ -14,13 +14,14 @@ wss.on('connection', (ws) => {
   console.log('New client connected\n');  
   ws.on('message', (message) => {
     var parsedMessage = JSON.parse(message);
+    parsedMessage.message.id = uuid();
+    parsedMessage.message.date = +new Date();
+
     console.log('incoming message: ', parsedMessage);
     var numberOfClients = wss.clients.size;
 
     switch(parsedMessage.type){
       case 'new_message':
-        parsedMessage.message.id = uuid();
-        parsedMessage.message.date = +new Date();
         wss.clients.forEach((client)=>{client.send(JSON.stringify(parsedMessage))});
         break;
 
@@ -39,7 +40,7 @@ wss.on('connection', (ws) => {
           type: 'new_client_colorset',
           username: parsedMessage.username,
           color: color,
-          message: { content: `Your color is ${color}` } }))
+          message: { content: `Your color is ${color}`, id: uuid(), date: +new Date() } }))
         break;
 
       default:

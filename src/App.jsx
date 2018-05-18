@@ -39,11 +39,12 @@ class App extends React.Component {
           
           this.webSocket.addEventListener('message', (message)=>{
             let parsedMessage = JSON.parse(message.data);
+            console.log('message Received: ', parsedMessage)
             if (parsedMessage.type === 'new_client_connection'){
               this.setState({usersOnline: parsedMessage.numberOfClients});
             }
             if (parsedMessage.type === 'new_client_colorset'){
-              this.setState({color: parsedMessage.color}, ()=>{console.log('this users color is set to: ', this.state.color)})
+              this.setState({color: parsedMessage.color})
             }
 
             let newMessageList = this.state.messageList;
@@ -55,7 +56,7 @@ class App extends React.Component {
       // Already connected to websocket, changing username:  
       } else if (newUsername !== this.state.currentUser && this.state.connectedToSocket === true){
         let oldUsername = this.state.currentUser;
-        this.setState({currentUser: newUsername}, ()=>{console.log(`${oldUsername} changed to ${newUsername}`)});
+        this.setState({currentUser: newUsername});
         this.webSocket.send(JSON.stringify(
           {type: 'username_change',
           color: this.state.color,

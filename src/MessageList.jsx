@@ -4,8 +4,8 @@ import Message from './Message.jsx';
 class MessageList extends React.Component{
 
   render(){
-    var messageList = this.props.messageList.map((message, index)=>{
-      return (<Message key={index} messageData={message}/>);  
+    var messageList = this.props.messageList.map((message)=>{
+      return (<Message key={message.message.id} messageData={message}/>);  
     });
     
     return (

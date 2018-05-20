@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+ import React, {Component} from 'react';
 
 class CreateMessageForm extends React.Component{
   constructor(props){

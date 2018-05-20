@@ -31,6 +31,8 @@ wss.on('connection', (ws) => {
 
       case 'new_client_connection':
         let color = generateColor();
+        ws.username = parsedMessage.username;
+        console.log(wss.clients)
 
         parsedMessage.numberOfClients = numberOfClients;
         parsedMessage.message.color = color;
@@ -49,14 +51,15 @@ wss.on('connection', (ws) => {
   })
 
   ws.on('close', () => {
-    console.log('Client disconnected');
+    let userLoggingOff = ws.username;
+    console.log(userLoggingOff, ' disconnected');
     var numberOfClients = wss.clients.size;
     wss.clients.forEach((client)=>{
       client.send(JSON.stringify({
         type: 'client_disconnected',
         numberOfClients: numberOfClients,
         message: {
-          content: 'someone left',
+          content: `${userLoggingOff} left the chatroom`,
           id: uuid(),
           date: new Date()
         }

@@ -48,7 +48,23 @@ wss.on('connection', (ws) => {
     }
   })
 
-  ws.on('close', () => console.log('Client disconnected'));
+  ws.on('close', () => {
+    console.log('Client disconnected');
+    var numberOfClients = wss.clients.size;
+    wss.clients.forEach((client)=>{
+      client.send(JSON.stringify({
+        type: 'client_disconnected',
+        numberOfClients: numberOfClients,
+        message: {
+          content: 'someone left',
+          id: uuid(),
+          date: new Date()
+        }
+      }))
+    });
+
+
+  });
 });
 
 console.log('Socket server initialized on port 3001')

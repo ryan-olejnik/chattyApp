@@ -46,6 +46,9 @@ class App extends React.Component {
             if (parsedMessage.type === 'new_client_colorset'){
               this.setState({color: parsedMessage.color})
             }
+            if (parsedMessage.type === 'client_disconnected'){
+              this.setState({usersOnline: parsedMessage.numberOfClients});
+            }
 
             let newMessageList = this.state.messageList;
             newMessageList.push(parsedMessage);

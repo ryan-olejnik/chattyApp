@@ -6,6 +6,13 @@ function Message(props){
         <span style={{color: props.messageData.message.color}} className="message-content">{props.messageData.message.content}</span>
       </div>
       );  
+  }
+  else if (props.messageData.type === 'client_disconnected'){
+    return (
+      <div class="message">
+        <span style={{color: props.messageData.message.color}} className="message-content">{props.messageData.message.content}</span>
+      </div>
+      );  
   } 
   else if (props.messageData.type === 'new_message'){
     return (
